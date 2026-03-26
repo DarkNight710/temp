@@ -1,0 +1,29 @@
+name: fakerclaw-checkin
+
+on:
+  schedule:
+    - cron: '5 1 * * *'   # 每天北京时间 09:05（UTC 01:05）
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 安装依赖
+        run: pip install requests
+
+      - name: 运行签到脚本
+        env:
+          fakerclaw: ${{ secrets.FAKERCLAW }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: python checkin.py
