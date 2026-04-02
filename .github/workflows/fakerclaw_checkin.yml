@@ -1,26 +1,26 @@
-name: Run JS on schedule
+name: FakerClaw Checkin
 
 on:
   schedule:
-    - cron: "5 0 * * *"   # 每天 UTC 01:00
-      timezone: "Asia/Shanghai"
-  workflow_dispatch:      # 允许你在 GitHub 页面手动点一下运行
+    - cron: "13 0 * * *"   # 北京时间 08:13 = UTC 00:13
+  workflow_dispatch:
 
 jobs:
-  run-js:
+  run:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: npm ci
-
       - name: Run script
+        env:
+          FAKERCLAW_COOKIE_ACCOUNTS: ${{ secrets.FAKERCLAW_COOKIE_ACCOUNTS }}
+          FAKERCLAW_ACCOUNTS: ${{ secrets.FAKERCLAW_ACCOUNTS }}
+          FAKERCLAW_BASE_URL: ${{ secrets.FAKERCLAW_BASE_URL }}
         run: node fakerclaw_checkin.js
